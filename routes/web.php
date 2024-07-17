@@ -20,7 +20,12 @@ Route::middleware('auth')->group(function () {
 
 Route::get('activate', [UserActivationController::class, 'showActivationForm'])->name('activate.form');
 Route::post('activate', [UserActivationController::class, 'sendActivationEmail'])->name('activate.email');
-Route::get('activate/{token}', [UserActivationController::class, 'showSetPasswordForm'])->name('activate.token');
-Route::post('activate/{token}', [UserActivationController::class, 'setPassword'])->name('activate.set_password');
+
+
+// Route to handle the token and show the set password form
+Route::get('/activate/{token}', [UserActivationController::class, 'showSetPasswordForm'])->name('activate.token');
+
+// Route to handle the form submission and set the password
+Route::post('/activate/{token}', [UserActivationController::class, 'activate.setPassword'])->name('activate.set_password');
 
 require __DIR__.'/auth.php';

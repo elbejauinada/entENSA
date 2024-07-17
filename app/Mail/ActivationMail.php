@@ -3,36 +3,30 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\User;
 
 class ActivationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $user;
-    public $link;
+    public $activationLink;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($user, $link)
+    public function __construct(User $user, $activationLink)
     {
         $this->user = $user;
-        $this->link = $link;
+        $this->activationLink = $activationLink;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
-        return $this->subject('Activate Your Account')
-                    ->view('emails.activation');
+        return $this->markdown('emails.activation')
+                    ->with([
+                        'user' => $this->user,
+                        'activationLink' => $this->activationLink,
+                    ]);
     }
 }

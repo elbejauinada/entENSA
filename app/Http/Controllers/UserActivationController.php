@@ -47,20 +47,20 @@ class UserActivationController extends Controller
         $request->validate([
             'password' => 'required|string|confirmed|min:8',
         ]);
-
+    
         $reset = DB::table('password_reset_tokens')->where('token', $token)->first();
-
+    
         if (!$reset || !Hash::check($token, $reset->token)) {
             return redirect()->route('activate.form')->withErrors(['email' => 'Invalid or expired token']);
         }
-
+    
         $user = User::where('email', $reset->email)->first();
         $user->password = Hash::make($request->password);
         $user->status = 'active';
         $user->save();
-
+    
         DB::table('password_reset_tokens')->where('email', $reset->email)->delete();
-
+    
         return redirect()->route('login')->with('status', 'Your account has been activated! You can now log in.');
     }
 }

@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Activate Your Account</title>
-</head>
-<body>
-    <h1>Hello, {{ $user->name }}</h1>
-    <p>Please click the following link to activate your account:</p>
-    <a href="{{ $link }}">Activate Account</a>
-</body>
-</html>
+<!-- resources/views/emails/activation.blade.php -->
+@component('mail::message')
+# Account Activation
+
+Click the button below to activate your account and set your password.
+
+@component('mail::button', ['url' => $activationLink])
+Activate Account
+@endcomponent
+
+Thanks,<br>
+{{ config('app.name') }}
+@endcomponent
